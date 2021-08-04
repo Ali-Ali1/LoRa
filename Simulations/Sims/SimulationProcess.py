@@ -4,10 +4,14 @@ from Framework import PropagationModel
 from Framework.AirInterface import AirInterface
 from Framework.EnergyProfile import EnergyProfile
 from Framework.Gateway import Gateway
+from Framework.MessagePacket import MessagePacket
 from Framework.LoRaParameters import LoRaParameters
 from Framework.Node import Node
 from Framework.SNRModel import SNRModel
 from Simulations.GlobalConfig import *
+
+
+
 
 tx_power_mW = {2: 91.8, 5: 95.9, 8: 101.6, 11: 120.8, 14: 146.5}
 rx_measurements = {'pre_mW': 8.2, 'pre_ms': 3.4, 'rx_lna_on_mW': 39,
@@ -24,20 +28,24 @@ def run(locs, p_size, sigma, sim_time, gateway_location, num_nodes, transmission
     gateway = Gateway(sim_env, gateway_location, max_snr_adr=True, avg_snr_adr=False)
     nodes = []
     air_interface = AirInterface(gateway, PropagationModel.LogShadow(std=sigma), SNRModel(), sim_env)
+
+
     for node_id in range(num_nodes):
         energy_profile = EnergyProfile(5.7e-3, 15, tx_power_mW,
                                        rx_power=rx_measurements)
+        Message_as_packet = MessagePacket('Hello World')
+        payload_size = Message_as_packet.payload_size
         _sf = np.random.choice(LoRaParameters.SPREADING_FACTORS)
         if start_with_fixed_sf:
             _sf = start_sf
         lora_param = LoRaParameters(freq=np.random.choice(LoRaParameters.DEFAULT_CHANNELS),
                                     sf=_sf,
                                     bw=125, cr=5, crc_enabled=1, de_enabled=0, header_implicit_mode=0, tp=14)
-        node = Node(node_id, energy_profile, lora_param, sleep_time=(8 * p_size / transmission_rate),
+        node = Node(Message_as_packet, node_id, energy_profile, lora_param, sleep_time=(8 * payload_size / transmission_rate),
                     process_time=5,
                     adr=adr,
                     location=locs[node_id],
-                    base_station=gateway, env=sim_env, payload_size=p_size, air_interface=air_interface,
+                    base_station=gateway, env=sim_env, payload_size= payload_size, air_interface=air_interface,
                     confirmed_messages=confirmed_messages)
         nodes.append(node)
         sim_env.process(node.run())
@@ -60,13 +68,14 @@ def run(locs, p_size, sigma, sim_time, gateway_location, num_nodes, transmission
 
     # eff_en = data_mean_nodes['TotalEnergy'][sigma] / (p_size*data_mean_nodes['UniquePackets'][sigma])
     # print('Eb {} for Size:{} and Sigma:{}'.format(eff_en, p_size, sigma))
-
+    message_as_packet = MessagePacket('Hello World')
     return {
+        'message_as_packet': message_as_packet,
         'mean_nodes': data_mean_nodes,
         'gateway': data_gateway,
         'air_interface': data_air_interface,
         'path_loss_std': sigma,
-        'payload_size': p_size,
+        'payload_size': message_as_packet.payload_size,
         'mean_energy_all_nodes': mean_energy_per_bit_list
 
     }

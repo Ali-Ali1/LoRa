@@ -4,7 +4,7 @@ import os
 import pickle
 
 import pandas as pd
-
+from Framework.MessagePacket import MessagePacket
 import SimulationProcess
 from Simulations.GlobalConfig import *
 from Framework import Location as loc
