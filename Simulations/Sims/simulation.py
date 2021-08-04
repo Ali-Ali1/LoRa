@@ -56,6 +56,7 @@ if __name__ == '__main__':
     # make a dictonary to hold the results that you want to study
     # Hence, diff. simulations can have diff _results dicts.
     _results = {
+        'Custom Messages': MessagePacket.message_packets,
         'cell_size': cell_size,
         'adr': adr,
         'confirmed_messages': confirmed_messages,
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     # create a Processing pool to speed-up the process
     # we are not greedy and only use 20% of the available CPUs
     # change this to your liking
-    pool = mp.Pool(math.floor(mp.cpu_count() / 3))
+    pool = mp.Pool(math.floor(mp.cpu_count() / 2))
     for n_sim in range(num_of_simulations):
         print(f'Simulation #{n_sim}')
         locations = locations_per_simulation[n_sim]
@@ -97,7 +98,7 @@ if __name__ == '__main__':
         # each of these simulations will be repeated by the num_of_simulations (Monto-Carlo)
         for payload_size in payload_sizes:
             for path_loss_variance in path_loss_variances:
-                args.append((locations, payload_size, path_loss_variance, simulation_time,
+                args.append((MessagePacket.message_packets, locations, payload_size, path_loss_variance, simulation_time,
                              gateway_location, num_nodes,
                              transmission_rate_bit_per_ms, confirmed_messages, adr))
 

@@ -1,5 +1,5 @@
 import numpy as np
-
+from Framework.MessagePacket import MessagePacket
 ############### SIMULATION SPECIFIC PARAMETERS ###############
 start_with_fixed_sf = False
 start_sf = 7
@@ -11,8 +11,9 @@ simulation_time = 24 * 60 * 60 * 1000 * 30/scaling_factor # 30 days
 cell_size = 1
 adr = True
 confirmed_messages = True
-
-payload_sizes = range(5, 55, 5)
+messages = MessagePacket.message_packets
+messages_num = MessagePacket.packets # Num of custom messages/Packets
+payload_sizes = range(0, messages_num, 1) # Payload Size set to num of custom messages, can also pick a random range
 path_loss_variances = [7.9]  # [0, 5, 7.8, 15, 20]
 
 MAC_IMPROVEMENT = False
