@@ -9,9 +9,9 @@ from Framework.MessagePacket import MessagePacket
 # according to LoraDesignGuide_STD.pdf
 # return the airtime of a packet in ms
 
-message_packet= MessagePacket('Hello World')
 
-def time_on_air(payload_size: message_packet.payload_size, lora_param: LoRaParameters):
+
+def time_on_air(payload_size: int, lora_param: LoRaParameters):
     n_pream = 8  # https://www.google.com/patents/EP2763321A1?cl=en
     t_sym = (2.0 ** lora_param.sf) / lora_param.bw
     t_pream = (n_pream + 4.25) * t_sym
@@ -26,17 +26,14 @@ def time_on_air(payload_size: message_packet.payload_size, lora_param: LoRaParam
 
 
 class UplinkMessage:
-    def __init__(self, Message_as_packet, node, start_on_air, payload_size,  id, collided=False,
+    def __init__(self, node, start_on_air, payload_size,  id, collided=False,
                  confirmed_message=True, unique_msg = True):
-        self.Message_as_packet = Message_as_packet
-        Message_as_packet = message_packet.message_as_packet
         self. is_confirmed_message=confirmed_message
         self.node = node
         self.start_on_air = start_on_air
         self.lora_param = node.lora_param
         self.lora_param.freq = np.random.choice(LoRaParameters.DEFAULT_CHANNELS)
         self.payload_size = payload_size
-        payload_size = message_packet.payload_size
         self.collided = collided
         self.received = False
         self.rss = None

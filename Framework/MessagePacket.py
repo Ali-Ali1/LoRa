@@ -1,4 +1,3 @@
 class MessagePacket:
-    def __init__(self, message_as_packet):
-        self.message_as_packet = message_as_packet
-        self.payload_size = len(message_as_packet)
+    message_packets = ['Hello', 'Hey', 'Hola', 'Marhaba', 'Namaskar', 'Hafa adai', 'Bonjour', 'Yasou', 'Namaste', 'Salve']
+    packets = len(message_packets)

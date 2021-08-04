@@ -155,7 +155,7 @@ class Node:
             if MAC_IMPROVEMENT and self.packets_sent < 20:
                 payload_size = 5
 
-            packet = UplinkMessage(Message_as_packet= MessagePacket('Hello World'), node=self, start_on_air=self.env.now, payload_size=payload_size,
+            packet = UplinkMessage(node=self, start_on_air=self.env.now, payload_size=payload_size,
                                    confirmed_message=self.confirmed_messages, id=self.unique_packet_id)
             downlink_message = yield self.env.process(self.send(packet))
             if downlink_message is None:
