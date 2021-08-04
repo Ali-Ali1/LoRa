@@ -9,10 +9,10 @@ from Framework.Gateway import Gateway
 from Framework.LoRaPacket import DownlinkMessage
 from Framework.LoRaPacket import DownlinkMetaMessage
 from Framework.LoRaPacket import UplinkMessage
+from Framework.MessagePacket import MessagePacket
 from Framework.LoRaParameters import LoRaParameters
 from Framework.Location import Location
 from Simulations.GlobalConfig import *
-
 
 class NodeState(Enum):
     OFFLINE = auto()
@@ -28,12 +28,13 @@ class NodeState(Enum):
 
 
 class Node:
-    def __init__(self, node_id, energy_profile: EnergyProfile, lora_parameters, sleep_time, process_time, adr, location,
-                 base_station: Gateway, env, payload_size, air_interface, confirmed_messages=True,
+    def __init__(self, Message_as_packet, node_id, energy_profile: EnergyProfile, lora_parameters, sleep_time, process_time, adr, location,
+                 base_station: Gateway, payload_size, env, air_interface, confirmed_messages=True,
                  massive_mimo_gain=False, number_of_antennas=1):
         self.power_gain = 1
         if massive_mimo_gain:
             self.power_gain = 1/np.sqrt(number_of_antennas)
+        self.Message_as_packet = Message_as_packet
         self.num_tx_state_changes = 0
         self.total_wait_time_because_dc = 0
         self.num_no_downlink = 0
@@ -154,7 +155,7 @@ class Node:
             if MAC_IMPROVEMENT and self.packets_sent < 20:
                 payload_size = 5
 
-            packet = UplinkMessage(node=self, start_on_air=self.env.now, payload_size=payload_size,
+            packet = UplinkMessage(Message_as_packet= MessagePacket('Hello World'), node=self, start_on_air=self.env.now, payload_size=payload_size,
                                    confirmed_message=self.confirmed_messages, id=self.unique_packet_id)
             downlink_message = yield self.env.process(self.send(packet))
             if downlink_message is None:
