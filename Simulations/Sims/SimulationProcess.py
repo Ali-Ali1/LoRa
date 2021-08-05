@@ -70,8 +70,8 @@ def run(message_packet, locs, p_size, sigma, sim_time, gateway_location, num_nod
     # print('Eb {} for Size:{} and Sigma:{}'.format(eff_en, p_size, sigma))
 
     return {
-        'message_as_packet': MessagePacket.message_as_packet,
-        'Custom Payload': MessagePacket.packet_size,
+        'message_as_packet': MessagePacket.message_packets,
+        'Custom Payload': MessagePacket.packets,
         'mean_nodes': data_mean_nodes,
         'gateway': data_gateway,
         'air_interface': data_air_interface,

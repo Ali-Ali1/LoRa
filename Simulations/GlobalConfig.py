@@ -13,7 +13,7 @@ adr = True
 confirmed_messages = True
 messages = MessagePacket.message_packets
 messages_num = MessagePacket.packets # Num of custom messages/Packets
-payload_sizes = range(0, messages_num, 1) # Payload Size set to num of custom messages, can also pick a random range
+payload_sizes = range(5, 55, 5) # Payload Size set to num of custom messages, can also pick a random range
 path_loss_variances = [7.9]  # [0, 5, 7.8, 15, 20]
 
 MAC_IMPROVEMENT = False
