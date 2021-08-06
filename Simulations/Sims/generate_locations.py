@@ -4,7 +4,7 @@ import pickle
 from Simulations.GlobalConfig import locations_file
 from Framework.Location import Location
 
-num_locations = 1
+num_locations = 10
 cell_size = 1
 num_of_simulations = 1
 

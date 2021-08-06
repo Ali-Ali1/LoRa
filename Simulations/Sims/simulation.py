@@ -48,7 +48,8 @@ if __name__ == '__main__':
     with open(locations_file, 'rb') as file_handler:
         locations_per_simulation = pickle.load(file_handler)
         num_of_simulations = len(locations_per_simulation)
-        num_nodes = len(locations_per_simulation[0])
+        num_nodes = len(locations_per_simulation)  # Changed the num of nodes to 10
+        num_routers = 3
 
     # create the results directory
     os.makedirs(os.path.dirname(results_file), exist_ok=True)
@@ -72,6 +73,7 @@ if __name__ == '__main__':
         'mean_energy': dict(),
         'std_energy': dict(),
         'num_of_simulations_done': 0
+
     }
 
     # As we study the effect on the payload size
@@ -99,7 +101,7 @@ if __name__ == '__main__':
         for payload_size in payload_sizes:
             for path_loss_variance in path_loss_variances:
                 args.append((MessagePacket.message_packets, locations, payload_size, path_loss_variance, simulation_time,
-                             gateway_location, num_nodes,
+                             gateway_location, num_nodes, num_routers,
                              transmission_rate_bit_per_ms, confirmed_messages, adr))
 
         # r_list = results of running the SimulationProcess.run_helper method for each arg in args
