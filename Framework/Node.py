@@ -29,12 +29,13 @@ class NodeState(Enum):
 
 class Node:
     def __init__(self, Message_as_packet, node_id, energy_profile: EnergyProfile, lora_parameters, sleep_time, process_time, adr, location,
-                 base_station: Gateway, payload_size, env, air_interface, confirmed_messages=True,
+                 base_station: Gateway, payload_size, coordinates, env, air_interface, confirmed_messages=True,
                  massive_mimo_gain=False, number_of_antennas=1):
         self.power_gain = 1
         if massive_mimo_gain:
             self.power_gain = 1/np.sqrt(number_of_antennas)
         self.Message_as_packet = Message_as_packet
+        self.coordinates = coordinates
         self.num_tx_state_changes = 0
         self.total_wait_time_because_dc = 0
         self.num_no_downlink = 0
